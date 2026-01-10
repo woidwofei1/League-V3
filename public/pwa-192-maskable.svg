@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+  <!-- Background fills entire icon including safe zone -->
+  <rect width="192" height="192" fill="#0a0a0f"/>
+  <!-- Content centered with 10% safe zone margin (19.2px each side, so content in 153.6x153.6 centered) -->
+  <g transform="translate(19.2, 19.2) scale(0.8)">
+    <circle cx="96" cy="76" r="40" fill="#ff2d78"/>
+    <circle cx="96" cy="116" r="40" fill="#00d4ff"/>
+    <text x="96" y="170" font-family="system-ui, sans-serif" font-size="24" font-weight="bold" fill="white" text-anchor="middle">PR</text>
+  </g>
+</svg>

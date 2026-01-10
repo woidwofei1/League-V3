@@ -7,3 +7,5 @@ export { Skeleton } from './Skeleton';
 export { PageTransition } from './PageTransition';
 export { AppShell } from './AppShell';
 export { BottomNav } from './BottomNav';
+export { AuthGate } from './AuthGate';
+export { ErrorPanel } from './ErrorPanel';

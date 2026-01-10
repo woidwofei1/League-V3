@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180">
+  <rect width="180" height="180" fill="#0a0a0f"/>
+  <circle cx="90" cy="70" r="38" fill="#ff2d78"/>
+  <circle cx="90" cy="108" r="38" fill="#00d4ff"/>
+  <text x="90" y="160" font-family="system-ui, sans-serif" font-size="22" font-weight="bold" fill="white" text-anchor="middle">PR</text>
+</svg>

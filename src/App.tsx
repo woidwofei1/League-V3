@@ -8,6 +8,7 @@ import {
   RivalryPage,
   HistoryPage,
   StatsPage,
+  ProfilePage,
 } from './pages'
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
       <AnimatePresence mode="wait">
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/profile" element={<ProfilePage />} />
           <Route path="/t/:tableSlug" element={<TablePage />} />
           <Route path="/match/new" element={<NewMatchPage />} />
           <Route path="/rivalry" element={<RivalryPage />} />

@@ -9,9 +9,21 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const variantStyles: Record<CardVariant, string> = {
-  surface: 'bg-bg-surface border-border-subtle',
-  glass: 'bg-bg-glass backdrop-blur-md border-border-subtle',
-  elevated: 'bg-bg-elevated border-border-active shadow-card',
+  surface: `
+    bg-bg-surface/90 backdrop-blur-sm
+    border-border-subtle/50
+    shadow-[0_2px_8px_rgba(0,0,0,0.3)]
+  `,
+  glass: `
+    bg-bg-glass backdrop-blur-lg
+    border-border-subtle/40
+    shadow-[0_4px_16px_rgba(0,0,0,0.2)]
+  `,
+  elevated: `
+    bg-bg-elevated/95 backdrop-blur-sm
+    border-border-subtle/30
+    shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_1px_rgba(255,255,255,0.05)_inset]
+  `,
 };
 
 const paddingStyles: Record<string, string> = {
@@ -31,7 +43,7 @@ export function Card({
   return (
     <div
       className={`
-        rounded-md border
+        rounded-2xl border
         ${variantStyles[variant]}
         ${paddingStyles[padding]}
         ${className}

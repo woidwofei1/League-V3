@@ -3,27 +3,28 @@
 /* ===== Design Tokens (CSS Variables) ===== */
 :root {
   /* Backgrounds */
-  --bg-primary: #0a0a0f;
-  --bg-surface: #12121a;
-  --bg-elevated: #1a1a24;
-  --bg-glass: rgba(255, 255, 255, 0.03);
+  --bg-primary: #08080c;
+  --bg-surface: #101018;
+  --bg-elevated: #181820;
+  --bg-glass: rgba(255, 255, 255, 0.04);
 
   /* Accents */
   --accent-pink: #ff2d78;
-  --accent-pink-glow: rgba(255, 45, 120, 0.25);
+  --accent-pink-glow: rgba(255, 45, 120, 0.35);
+  --accent-pink-deep: #c91a5a;
   --accent-cyan: #00f0ff;
-  --accent-cyan-glow: rgba(0, 240, 255, 0.2);
+  --accent-cyan-glow: rgba(0, 240, 255, 0.25);
   --accent-success: #22c55e;
   --accent-danger: #ef4444;
 
   /* Text */
   --text-primary: #ffffff;
-  --text-secondary: #a0a0b0;
-  --text-muted: #5a5a6a;
+  --text-secondary: #9898a8;
+  --text-muted: #505068;
 
   /* Borders */
-  --border-subtle: rgba(255, 255, 255, 0.06);
-  --border-active: rgba(255, 255, 255, 0.12);
+  --border-subtle: rgba(255, 255, 255, 0.05);
+  --border-active: rgba(255, 255, 255, 0.1);
 
   /* Typography */
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -45,10 +46,24 @@ html, body, #root {
 }
 
 body {
-  background-color: var(--bg-primary);
+  background: var(--bg-primary);
   color: var(--text-primary);
   min-width: 320px;
   overflow-x: hidden;
+  position: relative;
+}
+
+/* Pink Room Arena gradient background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 10%, rgba(255, 45, 120, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 80% at 90% 90%, rgba(180, 30, 100, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 50% at 50% 100%, rgba(255, 45, 120, 0.04) 0%, transparent 40%);
+  z-index: -1;
 }
 
 #root {

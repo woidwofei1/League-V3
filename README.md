@@ -1,6 +1,46 @@
-# React + TypeScript + Vite
+# Pink Room Rivalry
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A ping pong match tracker for the Pink Room in Innsbruck.
+
+## Setup
+
+### 1. Environment Variables
+
+Copy `.env.example` to `.env.local` and fill in your Supabase credentials:
+
+```bash
+cp .env.example .env.local
+```
+
+### 2. Supabase Configuration
+
+In your Supabase Dashboard, configure the following:
+
+**Authentication > URL Configuration:**
+- Site URL: `http://localhost:5173`
+- Redirect URLs (add all of these):
+  - `http://localhost:5173/auth/callback`
+  - `http://localhost:5173/*`
+
+**Database:**
+1. Run `supabase/schema.sql` in SQL Editor to create tables
+2. Run `supabase/seed.sql` to add initial data
+
+### 3. Run Development Server
+
+```bash
+npm install
+npm run dev
+```
+
+---
+
+## Tech Stack
+
+- React + TypeScript + Vite
+- Supabase (Auth + Database)
+- Tailwind CSS
+- Framer Motion
 
 Currently, two official plugins are available:
 
