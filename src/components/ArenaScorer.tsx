@@ -217,7 +217,7 @@ export function ArenaScorer({ onMatchComplete }: ArenaScorerProps) {
       {/* Table background image */}
       <div
         className="absolute inset-0 bg-cover bg-center opacity-30"
-        style={{ backgroundImage: 'url(/unnamed.jpg)' }}
+        style={{ backgroundImage: 'url(/arena2-bg.jpg)' }}
       />
       <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/60" />
 
