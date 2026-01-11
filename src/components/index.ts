@@ -9,3 +9,18 @@ export { AppShell } from './AppShell';
 export { BottomNav } from './BottomNav';
 export { AuthGate } from './AuthGate';
 export { ErrorPanel } from './ErrorPanel';
+
+// New cyberpunk components
+export { FAB } from './FAB';
+export { ChampionBanner } from './ChampionBanner';
+export { TrendIndicator, calculateTrend } from './TrendIndicator';
+export { VictoryOverlay } from './VictoryOverlay';
+export { BadgeCard, calculateBadges } from './BadgeCard';
+export type { BadgeType } from './BadgeCard';
+
+// Arena components (v2)
+export { ChampionHero } from './ChampionHero';
+export { ScoreboardArena } from './ScoreboardArena';
+export { StatStrip } from './StatStrip';
+export { LiveFeed } from './LiveFeed';
+export { FightFAB } from './FightFAB';

@@ -2,9 +2,20 @@ import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Play, Plus, Minus, Trophy, Check, Loader2, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { PageTransition, Button } from '../components';
+import { PageTransition, Button, VictoryOverlay } from '../components';
 import { insertMatch, PINK_ROOM_TABLE_ID } from '../lib/matches';
 import { PLAYER_IDS } from '../lib/profile';
+
+// Haptic feedback helper
+function haptic(duration = 10) {
+  try {
+    if (navigator.vibrate) {
+      navigator.vibrate(duration);
+    }
+  } catch {
+    // Silently fail
+  }
+}
 
 // ============ Types ============
 type Player = 'bachi' | 'crimebaker';
@@ -215,6 +226,7 @@ export function NewMatchPage() {
   const [match, setMatch] = useState<MatchState>(createInitialState);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [showVictory, setShowVictory] = useState(false);
 
   const bachiSetWins = countSetWins(match.sets, 'bachi');
   const crimebakerSetWins = countSetWins(match.sets, 'crimebaker');
@@ -226,8 +238,10 @@ export function NewMatchPage() {
     setMatch((prev) => ({ ...prev, isStarted: true }));
   }, []);
 
-  // Score increment
+  // Score increment with haptic feedback
   const handleScore = useCallback((player: Player, delta: number) => {
+    haptic(delta > 0 ? 15 : 8); // Stronger for increment
+    
     setMatch((prev) => {
       if (prev.matchWinner || !prev.isStarted) return prev;
 
@@ -243,10 +257,13 @@ export function NewMatchPage() {
       if (newScore >= POINTS_TO_WIN_SET && activeSet.winner === null) {
         activeSet.winner = player;
         sets[prev.activeSetIndex] = activeSet;
+        haptic(30); // Set win haptic
 
         // Check for match win
         const playerSetWins = countSetWins(sets, player);
         if (playerSetWins >= SETS_TO_WIN_MATCH) {
+          // Show victory overlay
+          setTimeout(() => setShowVictory(true), 200);
           return {
             ...prev,
             sets,
@@ -390,9 +407,9 @@ export function NewMatchPage() {
             />
           </div>
 
-          {/* Winner announcement */}
+          {/* Winner indicator (subtle, since VictoryOverlay shows the big celebration) */}
           <AnimatePresence>
-            {isMatchComplete && (
+            {isMatchComplete && !showVictory && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -403,7 +420,7 @@ export function NewMatchPage() {
                     size={24}
                     className={match.matchWinner === 'bachi' ? 'text-accent-pink' : 'text-accent-cyan'}
                   />
-                  <span className={`text-xl font-bold ${
+                  <span className={`font-display text-xl ${
                     match.matchWinner === 'bachi' ? 'text-accent-pink' : 'text-accent-cyan'
                   }`}>
                     {PLAYER_CONFIG[match.matchWinner!].name} Wins!
@@ -471,6 +488,17 @@ export function NewMatchPage() {
           )}
         </div>
       </div>
+
+      {/* Victory Celebration Overlay */}
+      {match.matchWinner && (
+        <VictoryOverlay
+          winner={PLAYER_CONFIG[match.matchWinner].name}
+          accent={match.matchWinner === 'bachi' ? 'pink' : 'cyan'}
+          isVisible={showVictory}
+          onComplete={() => setShowVictory(false)}
+          duration={3500}
+        />
+      )}
     </PageTransition>
   );
 }

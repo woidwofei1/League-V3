@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { TrendingUp, Target, Flame, Award, AlertCircle, Play } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip, ReferenceLine, BarChart, Bar, Cell } from 'recharts';
-import { PageTransition, Card, StatTile, PlayerBadge, Divider, Skeleton, Button } from '../components';
+import { PageTransition, Card, StatTile, PlayerBadge, Divider, Skeleton, Button, FAB } from '../components';
 import { useRivalryData, DEFAULT_TABLE_SLUG } from '../hooks/useRivalryData';
 import { getPlayerDisplayName } from '../lib/rivalryData';
 
@@ -23,9 +23,9 @@ export function StatsPage() {
     : [];
 
   return (
-    <PageTransition className="min-h-full">
-      <header className="px-6 pt-8 pb-6">
-        <h1 className="text-display text-text-primary">Stats</h1>
+    <PageTransition className="min-h-full pb-24">
+      <header className="px-6 pt-8 pb-4">
+        <h1 className="font-display text-display text-text-primary uppercase tracking-wider">Stats</h1>
         <p className="text-body text-text-secondary mt-1">
           Numbers don't lie
         </p>
@@ -300,6 +300,9 @@ export function StatsPage() {
           </>
         )}
       </div>
+
+      {/* FAB */}
+      <FAB to="/match/new" label="Log Match" />
     </PageTransition>
   );
 }
