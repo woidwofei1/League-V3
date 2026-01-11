@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trophy, Flame, Calendar, Clock, ChevronDown, ChevronUp } from 'lucide-react';
+import { Trophy, Flame, Clock, ChevronDown, ChevronUp } from 'lucide-react';
 import { getPlayerDisplayName } from '../lib/rivalryData';
 import { getPlayerName, getPlayerSlug } from '../lib/matches';
 import { useThemeClasses } from '../hooks/usePlayerTheme';
@@ -52,7 +52,7 @@ export function ChampionBanner({ leaderId, leadMargin }: ChampionBannerProps) {
                         <h2 className={`text-3xl font-display uppercase tracking-tighter shimmer-text`} style={{
                             '--theme-primary': leaderId === 'crimebaker' ? '#ec4899' : '#22d3ee'
                         } as any}>
-                            {getPlayerDisplayName(leaderId)}
+                            {getPlayerDisplayName(leaderId as "bachi" | "crimebaker" | null)}
                         </h2>
                     </div>
                 </div>
@@ -62,7 +62,7 @@ export function ChampionBanner({ leaderId, leadMargin }: ChampionBannerProps) {
                     <span className={`text-4xl font-display ${themeClasses.text} tabular-nums`}>+{leadMargin}</span>
                 </div>
             </div>
-        </motion.div>
+        </motion.div >
     );
 }
 
@@ -140,7 +140,7 @@ export function HotZone({ streak }: HotZoneProps) {
                     <div>
                         <div className="text-xs font-mono text-orange-400 uppercase tracking-widest mb-0.5">Hot Zone</div>
                         <div className={`text-xl font-display uppercase ${isBachi ? 'text-cyan-400' : 'text-pink-400'}`}>
-                            {getPlayerDisplayName(streak.player)}
+                            {getPlayerDisplayName(streak.player as "bachi" | "crimebaker" | null)}
                         </div>
                     </div>
                 </div>

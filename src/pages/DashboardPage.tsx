@@ -2,7 +2,6 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useRivalryData, DEFAULT_TABLE_SLUG } from '../hooks/useRivalryData';
 import { getPlayerDisplayName, getPlayerImage } from '../lib/rivalryData';
-import { getPlayerTheme } from '../hooks/usePlayerTheme';
 
 export function DashboardPage() {
   const navigate = useNavigate();
@@ -24,8 +23,7 @@ export function DashboardPage() {
   const isBachiLeader = leaderId === 'bachi';
 
   // Theme colors
-  const leaderColor = isBachiLeader ? 'text-neon-cyan' : 'text-neon-pink';
-  const challengerColor = isBachiLeader ? 'text-neon-pink' : 'text-neon-cyan';
+
 
   return (
     <div className="relative h-screen w-full overflow-hidden bg-midnight">
