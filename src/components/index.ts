@@ -24,3 +24,9 @@ export { ScoreboardArena } from './ScoreboardArena';
 export { StatStrip } from './StatStrip';
 export { LiveFeed } from './LiveFeed';
 export { FightFAB } from './FightFAB';
+
+// Phase 2: Radical Redesign Components
+export { FaceOffScreen } from './FaceOffScreen';
+export { DynamicIsland } from './DynamicIsland';
+export { ArcadeScorer } from './ArcadeScorer';
+export { BentoVault } from './BentoVault';

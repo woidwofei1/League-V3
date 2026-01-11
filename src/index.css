@@ -185,3 +185,190 @@ body {
 .animate-fill-width {
   animation: fillWidth 0.8s ease-out;
 }
+
+/* ===== Dynamic Theme Engine ===== */
+.theme-root {
+  --theme-primary: #ff00ff;
+  --theme-primary-glow: rgba(255, 0, 255, 0.5);
+  --theme-primary-dim: #b000b0;
+  --theme-secondary: #00F0FF;
+  --theme-secondary-glow: rgba(0, 240, 255, 0.35);
+}
+
+.theme-root[data-theme="pink"] {
+  --theme-primary: #ff00ff;
+  --theme-primary-glow: rgba(255, 0, 255, 0.5);
+  --theme-primary-dim: #b000b0;
+  --theme-secondary: #00F0FF;
+  --theme-secondary-glow: rgba(0, 240, 255, 0.35);
+}
+
+.theme-root[data-theme="cyan"] {
+  --theme-primary: #00F0FF;
+  --theme-primary-glow: rgba(0, 240, 255, 0.5);
+  --theme-primary-dim: #00a0b0;
+  --theme-secondary: #ff00ff;
+  --theme-secondary-glow: rgba(255, 0, 255, 0.35);
+}
+
+/* ===== Clip Path Utilities for Face-Off Layout ===== */
+.clip-diagonal-bottom {
+  clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+}
+
+.clip-diagonal-top {
+  clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 100%);
+}
+
+.clip-diagonal-slash {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 20% 100%);
+}
+
+.clip-diagonal-slash-reverse {
+  clip-path: polygon(0 0, 80% 0, 100% 100%, 0 100%);
+}
+
+/* ===== Screen Shake Animation ===== */
+@keyframes screenShake {
+  0%, 100% { transform: translateX(0); }
+  10% { transform: translateX(-8px) rotate(-1deg); }
+  20% { transform: translateX(8px) rotate(1deg); }
+  30% { transform: translateX(-6px) rotate(-0.5deg); }
+  40% { transform: translateX(6px) rotate(0.5deg); }
+  50% { transform: translateX(-4px); }
+  60% { transform: translateX(4px); }
+  70% { transform: translateX(-2px); }
+  80% { transform: translateX(2px); }
+  90% { transform: translateX(-1px); }
+}
+
+.animate-shake {
+  animation: screenShake 0.5s ease-out;
+}
+
+/* ===== Shatter Effect ===== */
+@keyframes shatter {
+  0% { 
+    transform: scale(1); 
+    opacity: 1;
+    filter: brightness(1);
+  }
+  20% { 
+    transform: scale(1.05); 
+    filter: brightness(2);
+  }
+  100% { 
+    transform: scale(1.5); 
+    opacity: 0;
+    filter: brightness(3);
+  }
+}
+
+.animate-shatter {
+  animation: shatter 0.6s ease-out forwards;
+}
+
+/* ===== Glow Pulse for VS Button ===== */
+@keyframes glowPulse {
+  0%, 100% { 
+    box-shadow: 0 0 20px var(--theme-primary-glow), 
+                0 0 40px var(--theme-primary-glow),
+                inset 0 0 20px rgba(255, 255, 255, 0.1);
+  }
+  50% { 
+    box-shadow: 0 0 40px var(--theme-primary-glow), 
+                0 0 80px var(--theme-primary-glow),
+                inset 0 0 30px rgba(255, 255, 255, 0.2);
+  }
+}
+
+.animate-glow-pulse {
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+/* ===== Neon Text Glow (Theme Aware) ===== */
+.text-glow-theme {
+  text-shadow: 0 0 10px var(--theme-primary-glow),
+               0 0 20px var(--theme-primary-glow),
+               0 0 40px var(--theme-primary-glow);
+}
+
+.text-glow-theme-strong {
+  text-shadow: 0 0 10px var(--theme-primary),
+               0 0 20px var(--theme-primary),
+               0 0 40px var(--theme-primary-glow),
+               0 0 80px var(--theme-primary-glow);
+}
+
+/* ===== Morphing Pill Animation ===== */
+@keyframes morphExpand {
+  0% { 
+    width: 120px;
+    border-radius: 30px;
+  }
+  100% { 
+    width: 280px;
+    border-radius: 24px;
+  }
+}
+
+@keyframes morphContract {
+  0% { 
+    width: 280px;
+    border-radius: 24px;
+  }
+  100% { 
+    width: 120px;
+    border-radius: 30px;
+  }
+}
+
+/* ===== Odometer Style Counter ===== */
+@keyframes countRoll {
+  0% { transform: translateY(100%); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+.animate-count-roll {
+  animation: countRoll 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ===== Flame Flicker for Streak Icon ===== */
+@keyframes flameFlicker {
+  0%, 100% { 
+    transform: scaleY(1) scaleX(1);
+    filter: brightness(1);
+  }
+  25% { 
+    transform: scaleY(1.1) scaleX(0.95);
+    filter: brightness(1.2);
+  }
+  50% { 
+    transform: scaleY(0.95) scaleX(1.05);
+    filter: brightness(0.9);
+  }
+  75% { 
+    transform: scaleY(1.05) scaleX(0.98);
+    filter: brightness(1.1);
+  }
+}
+
+.animate-flame {
+  animation: flameFlicker 0.3s ease-in-out infinite;
+}
+
+/* ===== Slide In From Bottom ===== */
+@keyframes slideInBottom {
+  0% { 
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% { 
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in-bottom {
+  animation: slideInBottom 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

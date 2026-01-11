@@ -1,12 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { KeyRound, Loader2, AlertCircle, CheckCircle2, Wifi } from 'lucide-react';
+import { KeyRound, Loader2, AlertCircle, CheckCircle2, Wifi, Swords } from 'lucide-react';
 import { createMyProfile, PLAYER_IDS } from '../lib/profile';
 import { trace } from '../lib/bootTrace';
-import { Button } from '../components';
 
-// Access codes from environment variables (with fallback to literal values for dev)
 const ACCESS_CODE_BACHI = import.meta.env.VITE_ACCESS_CODE_BACHI as string | undefined;
 const ACCESS_CODE_CRIME = import.meta.env.VITE_ACCESS_CODE_CRIMEBAKER as string | undefined;
 
@@ -25,23 +23,19 @@ export function AccessCodePage({ onProfileCreated, isAuthenticated }: AccessCode
     e.preventDefault();
     setError(null);
     
-    // Don't allow submission if not authenticated
     if (!isAuthenticated) {
       setError('Still connecting... please wait.');
       return;
     }
     
     setIsLoading(true);
-
     trace('accessCode: validating', { codeLength: code.length });
 
     try {
-      // Validate access code and determine player
       const trimmedCode = code.trim().toUpperCase();
       let playerId: string | null = null;
       let playerName: string | null = null;
 
-      // Check against env vars first, then fallback to literal names
       if (ACCESS_CODE_BACHI && trimmedCode === ACCESS_CODE_BACHI.toUpperCase()) {
         playerId = PLAYER_IDS.bachi;
         playerName = 'Bachi';
@@ -49,7 +43,6 @@ export function AccessCodePage({ onProfileCreated, isAuthenticated }: AccessCode
         playerId = PLAYER_IDS.crimebaker;
         playerName = 'Crimebaker';
       } else if (!ACCESS_CODE_BACHI && !ACCESS_CODE_CRIME) {
-        // Fallback: if env vars not set, allow literal "BACHI" / "CRIMEBAKER"
         if (trimmedCode === 'BACHI') {
           playerId = PLAYER_IDS.bachi;
           playerName = 'Bachi';
@@ -61,27 +54,25 @@ export function AccessCodePage({ onProfileCreated, isAuthenticated }: AccessCode
 
       if (!playerId) {
         trace('accessCode: invalid code');
-        setError('Invalid access code. Please check and try again.');
+        setError('Invalid access code');
         setIsLoading(false);
         return;
       }
 
       trace('accessCode: code valid', { player: playerName });
-
-      // Create or update profile with the matched player
       trace('accessCode: upserting profile', { playerId });
       await createMyProfile(playerId);
       trace('accessCode: profile saved successfully');
 
-      // Redirect to main table page
-      navigate('/t/pink-room-main');
+      // Navigate to the new home dashboard
+      navigate('/home');
       onProfileCreated();
     } catch (err) {
       const errMsg = err instanceof Error ? err.message : 'Failed to select player';
       trace('accessCode: error', { error: errMsg });
       
       if (errMsg.includes('Not authenticated')) {
-        setError('Session expired. Please refresh the page.');
+        setError('Session expired. Please refresh.');
       } else {
         setError(errMsg);
       }
@@ -90,113 +81,145 @@ export function AccessCodePage({ onProfileCreated, isAuthenticated }: AccessCode
     }
   };
 
-  // Check if access codes are configured (allow fallback to literal names if not)
-  const codesConfigured = ACCESS_CODE_BACHI || ACCESS_CODE_CRIME;
-
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-bg-primary">
+    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-black">
+      {/* Background gradient */}
+      <div className="fixed inset-0 bg-gradient-to-b from-pink-950/20 via-black to-black pointer-events-none" />
+      
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-sm"
+        className="relative w-full max-w-sm z-10"
       >
-        {/* Logo / Title */}
-        <div className="text-center mb-8">
-          <h1 className="text-display text-text-primary mb-2">
+        {/* Logo */}
+        <div className="text-center mb-10">
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.1 }}
+            className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-pink-500/20 to-cyan-500/20 border border-white/10 mb-6"
+          >
+            <Swords size={36} className="text-white" />
+          </motion.div>
+          
+          <motion.h1 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-4xl font-display uppercase text-white mb-2"
+          >
             Pink Room
-            <br />
-            <span className="text-accent-pink">Rivalry</span>
-          </h1>
-          <p className="text-body text-text-secondary">
-            Enter your access code to continue
-          </p>
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="text-lg font-display uppercase bg-gradient-to-r from-pink-400 to-cyan-400 bg-clip-text text-transparent"
+          >
+            Rivalry
+          </motion.p>
         </div>
 
-        {/* Connection status pill */}
-        <div className="flex justify-center mb-4">
+        {/* Connection status */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="flex justify-center mb-6"
+        >
           {isAuthenticated ? (
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-accent-success/10 border border-accent-success/30 rounded-full">
-              <CheckCircle2 className="w-3.5 h-3.5 text-accent-success" />
-              <span className="text-caption text-accent-success">Connected</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 rounded-full">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <span className="text-sm font-mono text-emerald-400 uppercase tracking-wider">Connected</span>
             </div>
           ) : (
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-accent-cyan/10 border border-accent-cyan/30 rounded-full">
-              <Wifi className="w-3.5 h-3.5 text-accent-cyan animate-pulse" />
-              <span className="text-caption text-accent-cyan">Connecting...</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-full">
+              <Wifi className="w-4 h-4 text-cyan-400 animate-pulse" />
+              <span className="text-sm font-mono text-cyan-400 uppercase tracking-wider">Connecting...</span>
             </div>
           )}
-        </div>
+        </motion.div>
 
-        {/* Access code form - always show, button disabled until authenticated */}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="bg-bg-surface border border-border-subtle rounded-lg p-4">
-            <label className="block text-caption text-text-secondary mb-2">
+        {/* Form */}
+        <motion.form 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          onSubmit={handleSubmit} 
+          className="space-y-4"
+        >
+          {/* Code input */}
+          <div className="glass-panel p-4">
+            <label className="block text-xs text-white/40 font-mono uppercase tracking-wider mb-3">
               Access Code
             </label>
-              <div className="relative">
-                <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
-                <input
-                  type="text"
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                  placeholder="Enter your code"
-                  required
-                  autoFocus
-                  autoComplete="off"
-                  autoCapitalize="characters"
-                  className="
-                    w-full pl-11 pr-4 py-3
-                    bg-bg-elevated border border-border-subtle rounded-md
-                    text-body text-text-primary placeholder:text-text-muted
-                    focus:outline-none focus:border-accent-cyan
-                    transition-colors uppercase tracking-widest font-mono
-                  "
-                />
-              </div>
+            <div className="relative">
+              <KeyRound className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30" />
+              <input
+                type="text"
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                placeholder="Enter your code"
+                required
+                autoFocus
+                autoComplete="off"
+                autoCapitalize="characters"
+                className="
+                  w-full pl-12 pr-4 py-4
+                  bg-white/5 border border-white/10 rounded-xl
+                  text-white placeholder:text-white/30
+                  focus:outline-none focus:border-cyan-500/50 focus:bg-white/10
+                  transition-all uppercase tracking-widest font-mono text-lg
+                "
+              />
             </div>
+          </div>
 
-            {error && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="p-3 bg-accent-danger/10 border border-accent-danger/30 rounded-lg flex items-start gap-2"
-              >
-                <AlertCircle className="w-4 h-4 text-accent-danger flex-shrink-0 mt-0.5" />
-                <p className="text-caption text-accent-danger">{error}</p>
-              </motion.div>
-            )}
+          {/* Error */}
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl flex items-center gap-3"
+            >
+              <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
+              <p className="text-sm text-red-400">{error}</p>
+            </motion.div>
+          )}
 
-          <Button
+          {/* Submit button */}
+          <button
             type="submit"
             disabled={isLoading || !code.trim() || !isAuthenticated}
-            className="w-full"
+            className="
+              w-full py-4 rounded-xl font-display uppercase tracking-wider text-lg
+              bg-gradient-to-r from-pink-600 to-pink-500
+              hover:from-pink-500 hover:to-pink-400
+              disabled:from-white/10 disabled:to-white/5 disabled:text-white/30
+              text-white transition-all
+              active:scale-[0.98]
+            "
           >
             {isLoading ? (
-              <>
-                <Loader2 className="w-5 h-5 animate-spin mr-2" />
+              <span className="flex items-center justify-center gap-2">
+                <Loader2 className="w-5 h-5 animate-spin" />
                 Verifying...
-              </>
+              </span>
             ) : !isAuthenticated ? (
               'Connecting...'
             ) : (
-              'Continue'
+              'Enter Arena'
             )}
-          </Button>
+          </button>
 
-          {!codesConfigured && (
-            <p className="text-caption text-accent-warning text-center">
-              Tip: Set VITE_ACCESS_CODE_BACHI and VITE_ACCESS_CODE_CRIMEBAKER in .env.local
-            </p>
-          )}
-
-          <p className="text-caption text-text-muted text-center">
+          {/* Help text */}
+          <p className="text-center text-white/30 text-sm font-mono">
             Ask your rival for your access code
           </p>
-        </form>
+        </motion.form>
       </motion.div>
     </div>
   );
 }
 
-// Keep old export name for backwards compatibility
 export { AccessCodePage as SignInPage };

@@ -1,31 +1,40 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
 import { AppShell } from './components'
+import { ThemeProvider } from './contexts/ThemeContext'
 import {
   HomePage,
-  TablePage,
-  NewMatchPage,
-  RivalryPage,
-  HistoryPage,
-  StatsPage,
   ProfilePage,
+  FaceOffPage,
+  ArcadeMatchPage,
+  DashboardPage,
+  BentoProfilePage,
 } from './pages'
 
 function App() {
   return (
-    <AppShell>
-      <AnimatePresence mode="wait">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/t/:tableSlug" element={<TablePage />} />
-          <Route path="/match/new" element={<NewMatchPage />} />
-          <Route path="/rivalry" element={<RivalryPage />} />
-          <Route path="/history" element={<HistoryPage />} />
-          <Route path="/stats" element={<StatsPage />} />
-        </Routes>
-      </AnimatePresence>
-    </AppShell>
+    <ThemeProvider>
+      <AppShell>
+        <AnimatePresence mode="wait">
+          <Routes>
+            {/* Main Navigation (3 items: Home, Fight, Profile) */}
+            <Route path="/" element={<FaceOffPage />} />
+            <Route path="/home" element={<DashboardPage />} />
+            <Route path="/match/new" element={<ArcadeMatchPage />} />
+            <Route path="/arcade" element={<ArcadeMatchPage />} />
+            <Route path="/profile" element={<BentoProfilePage />} />
+            
+            {/* Legacy routes - redirect to new pages */}
+            <Route path="/t/:tableSlug" element={<Navigate to="/home" replace />} />
+            <Route path="/stats" element={<DashboardPage />} />
+            <Route path="/history" element={<DashboardPage />} />
+            <Route path="/rivalry" element={<DashboardPage />} />
+            <Route path="/home-legacy" element={<HomePage />} />
+            <Route path="/profile-legacy" element={<ProfilePage />} />
+          </Routes>
+        </AnimatePresence>
+      </AppShell>
+    </ThemeProvider>
   )
 }
 
