@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArcadeScorer } from '../components';
+import { ArenaScorer } from '../components';
 import { insertMatch } from '../lib/matches';
 import { PLAYER_IDS } from '../lib/profile';
 import { DEFAULT_TABLE_SLUG } from '../hooks/useRivalryData';
@@ -65,5 +65,5 @@ export function ArcadeMatchPage() {
     }
   }, [navigate]);
 
-  return <ArcadeScorer onMatchComplete={handleMatchComplete} />;
+  return <ArenaScorer onMatchComplete={handleMatchComplete} />;
 }

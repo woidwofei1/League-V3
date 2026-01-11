@@ -82,9 +82,14 @@ export function AccessCodePage({ onProfileCreated, isAuthenticated }: AccessCode
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-black">
-      {/* Background gradient */}
-      <div className="fixed inset-0 bg-gradient-to-b from-pink-950/20 via-black to-black pointer-events-none" />
+    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-black relative overflow-hidden">
+      {/* Table background image */}
+      <div 
+        className="fixed inset-0 bg-cover bg-center opacity-15"
+        style={{ backgroundImage: 'url(/tabla-bg.png)' }}
+      />
+      {/* Gradient overlay */}
+      <div className="fixed inset-0 bg-gradient-to-b from-black/70 via-pink-950/20 to-black pointer-events-none" />
       
       <motion.div
         initial={{ opacity: 0, y: 20 }}

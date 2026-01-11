@@ -56,6 +56,8 @@ export default defineConfig({
         ],
       },
       workbox: {
+        // Allow larger files for background images
+        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024, // 10MB
         // Cache static assets
         globPatterns: ['**/*.{js,css,html,svg,png,ico,woff,woff2}'],
         // Runtime caching strategies

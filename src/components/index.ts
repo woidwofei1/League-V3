@@ -29,4 +29,5 @@ export { FightFAB } from './FightFAB';
 export { FaceOffScreen } from './FaceOffScreen';
 export { DynamicIsland } from './DynamicIsland';
 export { ArcadeScorer } from './ArcadeScorer';
+export { ArenaScorer } from './ArenaScorer';
 export { BentoVault } from './BentoVault';

@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { User, MapPin, LogOut, Loader2, Trophy, Flame, Target, TrendingUp, Zap } from 'lucide-react';
+import { User, MapPin, LogOut, Loader2, Trophy, TrendingUp } from 'lucide-react';
 import { LineChart, Line, ResponsiveContainer } from 'recharts';
 import { motion } from 'framer-motion';
 import { DynamicIsland, calculateBadges, BadgeCard } from '../components';
@@ -133,96 +133,113 @@ export function BentoProfilePage() {
 
   return (
     <div className="min-h-screen bg-black pb-24">
-      {/* Header */}
-      <motion.header
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="px-4 pt-8 pb-4"
-      >
-        <h1 className="text-3xl font-display uppercase text-white mb-1">Profile</h1>
-        <p className="text-white/40 font-mono text-sm uppercase tracking-wider">Your Rivalry Identity</p>
-      </motion.header>
-
-      <div className="px-4 space-y-3">
-        {/* Player Identity Card - Large */}
-        <BentoCard className="relative overflow-hidden" delay={0.05}>
-          <div 
-            className={`absolute inset-0 ${
-              themeColor === 'pink' 
-                ? 'bg-gradient-to-br from-pink-500/20 via-transparent to-transparent' 
-                : 'bg-gradient-to-br from-cyan-500/20 via-transparent to-transparent'
-            }`}
-          />
-          <div className="relative flex items-center gap-4">
-            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-display ${
-              themeColor === 'pink' ? 'bg-pink-500/20 text-pink-400' : 'bg-cyan-500/20 text-cyan-400'
-            }`}>
+      {/* Epic Header */}
+      <div className="relative overflow-hidden">
+        {/* Background image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-15"
+          style={{ backgroundImage: 'url(/tabla-bg.png)' }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black" />
+        
+        {/* Player color glow */}
+        <motion.div
+          className={`absolute top-0 ${isPlayerBachi ? 'left-0' : 'right-0'} w-64 h-64 rounded-full blur-3xl ${
+            themeColor === 'pink' ? 'bg-pink-500/30' : 'bg-cyan-500/30'
+          }`}
+          animate={{ 
+            scale: [1, 1.3, 1],
+            opacity: [0.2, 0.4, 0.2],
+          }}
+          transition={{ duration: 3, repeat: Infinity }}
+        />
+        
+        <motion.header
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="relative px-4 pt-10 pb-6"
+        >
+          {/* Large player avatar */}
+          <div className="flex items-center gap-4">
+            <motion.div 
+              className={`w-20 h-20 rounded-2xl flex items-center justify-center text-4xl font-display border-2 ${
+                themeColor === 'pink' 
+                  ? 'bg-pink-500/20 border-pink-500/50 text-pink-400' 
+                  : 'bg-cyan-500/20 border-cyan-500/50 text-cyan-400'
+              }`}
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.1 }}
+              style={{ 
+                boxShadow: themeColor === 'pink' 
+                  ? '0 0 30px rgba(236, 72, 153, 0.3)' 
+                  : '0 0 30px rgba(34, 211, 238, 0.3)'
+              }}
+            >
               {playerName[0]}
-            </div>
+            </motion.div>
+            
             <div className="flex-1">
-              <p className={`text-2xl font-display uppercase ${
-                themeColor === 'pink' ? 'text-pink-400' : 'text-cyan-400'
-              }`}>
+              <motion.h1 
+                className={`text-3xl font-display uppercase tracking-tight ${
+                  themeColor === 'pink' ? 'text-pink-400' : 'text-cyan-400'
+                }`}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.15 }}
+                style={{ textShadow: '0 0 20px currentColor' }}
+              >
                 {playerName}
-              </p>
-              <div className="flex items-center gap-2 mt-1">
+              </motion.h1>
+              
+              <motion.div 
+                className="flex items-center gap-2 mt-2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.25 }}
+              >
                 {playerStats?.isLeader && (
-                  <span className={`text-xs font-mono uppercase px-2 py-0.5 rounded-full ${
-                    themeColor === 'pink' ? 'bg-pink-500/20 text-pink-400' : 'bg-cyan-500/20 text-cyan-400'
+                  <span className={`px-2 py-0.5 text-xs font-mono uppercase rounded-full ${
+                    themeColor === 'pink' 
+                      ? 'bg-pink-500/20 text-pink-400 border border-pink-500/30' 
+                      : 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30'
                   }`}>
-                    Champion
+                    👑 Champion
                   </span>
                 )}
-                <span className="text-white/40 text-xs font-mono uppercase">
-                  {playerStats?.wins ?? 0}W - {playerStats?.losses ?? 0}L
+                <span className="text-white/40 font-mono text-sm">
+                  {playerStats?.wins ?? 0}W – {playerStats?.losses ?? 0}L
                 </span>
-              </div>
+              </motion.div>
             </div>
           </div>
-        </BentoCard>
-
-        {/* Stats Grid - 2x2 */}
-        <div className="grid grid-cols-2 gap-3">
-          {/* Wins */}
-          <BentoCard delay={0.1}>
-            <div className="flex items-center gap-2 mb-2">
-              <Trophy className={themeColor === 'pink' ? 'text-pink-400' : 'text-cyan-400'} size={16} />
-              <span className="text-xs text-white/40 font-mono uppercase tracking-wider">Wins</span>
+          
+          {/* Quick stats bar */}
+          <motion.div 
+            className="flex gap-4 mt-6"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <div className="flex-1 text-center py-3 bg-white/5 rounded-xl border border-white/10">
+              <p className={`text-2xl font-display ${themeColor === 'pink' ? 'text-pink-400' : 'text-cyan-400'}`}>
+                {currentElo}
+              </p>
+              <p className="text-xs text-white/40 font-mono uppercase">Elo</p>
             </div>
-            <p className="text-4xl font-mono font-bold text-white">{playerStats?.wins ?? 0}</p>
-          </BentoCard>
-
-          {/* Win Rate */}
-          <BentoCard delay={0.15}>
-            <div className="flex items-center gap-2 mb-2">
-              <Target className="text-emerald-400" size={16} />
-              <span className="text-xs text-white/40 font-mono uppercase tracking-wider">Win Rate</span>
+            <div className="flex-1 text-center py-3 bg-white/5 rounded-xl border border-white/10">
+              <p className="text-2xl font-display text-white">{Math.round(playerStats?.winRate ?? 0)}%</p>
+              <p className="text-xs text-white/40 font-mono uppercase">Win Rate</p>
             </div>
-            <p className="text-4xl font-mono font-bold text-white">
-              {Math.round(playerStats?.winRate ?? 0)}%
-            </p>
-          </BentoCard>
-
-          {/* Current Streak */}
-          <BentoCard delay={0.2}>
-            <div className="flex items-center gap-2 mb-2">
-              <Flame className="text-orange-400" size={16} />
-              <span className="text-xs text-white/40 font-mono uppercase tracking-wider">Streak</span>
+            <div className="flex-1 text-center py-3 bg-white/5 rounded-xl border border-white/10">
+              <p className="text-2xl font-display text-orange-400">{playerStats?.currentStreak ?? 0}</p>
+              <p className="text-xs text-white/40 font-mono uppercase">Streak</p>
             </div>
-            <p className="text-4xl font-mono font-bold text-white">{playerStats?.currentStreak ?? 0}</p>
-          </BentoCard>
+          </motion.div>
+        </motion.header>
+      </div>
 
-          {/* Elo */}
-          <BentoCard delay={0.25}>
-            <div className="flex items-center gap-2 mb-2">
-              <Zap className={themeColor === 'pink' ? 'text-pink-400' : 'text-cyan-400'} size={16} />
-              <span className="text-xs text-white/40 font-mono uppercase tracking-wider">Elo</span>
-            </div>
-            <p className={`text-4xl font-mono font-bold ${
-              themeColor === 'pink' ? 'text-pink-400' : 'text-cyan-400'
-            }`}>{currentElo}</p>
-          </BentoCard>
-        </div>
+      <div className="px-4 space-y-3 -mt-2">
 
         {/* Elo Chart */}
         {playerEloData.length > 1 && (

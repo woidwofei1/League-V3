@@ -77,36 +77,119 @@ export function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-black pb-24">
-      {/* Header */}
-      <motion.header
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="px-4 pt-8 pb-4"
-      >
-        <h1 className="text-3xl font-display uppercase text-white mb-1">Dashboard</h1>
-        <p className="text-white/40 font-mono text-sm uppercase tracking-wider">Stats & History</p>
-      </motion.header>
+      {/* Epic Header */}
+      <div className="relative overflow-hidden">
+        {/* Background image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-20"
+          style={{ backgroundImage: 'url(/tabla-bg.png)' }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black" />
+        
+        {/* Animated glow */}
+        <motion.div
+          className={`absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl ${
+            leader === 'crimebaker' ? 'bg-pink-500/20' : 'bg-cyan-500/20'
+          }`}
+          animate={{ 
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{ duration: 4, repeat: Infinity }}
+        />
+        
+        <motion.header
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="relative px-4 pt-10 pb-8"
+        >
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-1 h-8 rounded-full bg-gradient-to-b from-cyan-400 to-pink-400" />
+            <div>
+              <h1 className="text-4xl font-display uppercase text-white tracking-tight">Dashboard</h1>
+              <p className="text-white/40 font-mono text-xs uppercase tracking-widest mt-1">Live Rivalry Stats</p>
+            </div>
+          </div>
+          
+          {/* Quick stat pills */}
+          <div className="flex gap-2 mt-4">
+            <div className="px-3 py-1.5 bg-white/5 rounded-full border border-white/10">
+              <span className="text-xs font-mono text-white/60">{summary.totalMatches} matches</span>
+            </div>
+            {summary.currentStreak.count > 1 && (
+              <div className={`px-3 py-1.5 rounded-full border ${
+                summary.currentStreak.player === 'bachi' 
+                  ? 'bg-cyan-500/10 border-cyan-500/30' 
+                  : 'bg-pink-500/10 border-pink-500/30'
+              }`}>
+                <span className={`text-xs font-mono ${
+                  summary.currentStreak.player === 'bachi' ? 'text-cyan-400' : 'text-pink-400'
+                }`}>
+                  🔥 {summary.currentStreak.count} streak
+                </span>
+              </div>
+            )}
+          </div>
+        </motion.header>
+      </div>
 
       <div className="px-4 space-y-4">
-        {/* Leader Banner */}
+        {/* VS Scoreboard */}
         <BentoCard className="relative overflow-hidden" delay={0.05}>
-          <div 
-            className={`absolute inset-0 ${
-              themeColor === 'pink' 
-                ? 'bg-gradient-to-br from-pink-500/20 via-transparent to-transparent' 
-                : 'bg-gradient-to-br from-cyan-500/20 via-transparent to-transparent'
-            }`}
-          />
-          <div className="relative flex items-center justify-between">
-            <div>
-              <p className="text-xs text-white/40 font-mono uppercase tracking-wider mb-1">Current King</p>
-              <p className={`text-3xl font-display uppercase ${
-                themeColor === 'pink' ? 'text-pink-400' : 'text-cyan-400'
-              }`}>
-                {leader ? getPlayerDisplayName(leader) : 'Tied'}
-              </p>
+          <div className="flex items-center justify-between">
+            {/* Bachi */}
+            <div className="text-center flex-1">
+              <p className="text-xs text-white/40 font-mono uppercase tracking-wider mb-2">Bachi</p>
+              <p className="text-5xl font-display text-cyan-400 tabular-nums">{summary.bachiWins}</p>
             </div>
-            {leader && (
+            
+            {/* VS */}
+            <div className="px-6">
+              <p className="text-white/30 font-display text-xl">VS</p>
+            </div>
+            
+            {/* Crimebaker */}
+            <div className="text-center flex-1">
+              <p className="text-xs text-white/40 font-mono uppercase tracking-wider mb-2">Crimebaker</p>
+              <p className="text-5xl font-display text-pink-400 tabular-nums">{summary.crimebakerWins}</p>
+            </div>
+          </div>
+          
+          {/* Win rate bar */}
+          <div className="mt-4 flex items-center gap-2">
+            <span className="text-xs text-white/30 font-mono">{summary.winRateBachi.toFixed(0)}%</span>
+            <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-gradient-to-r from-cyan-500 to-pink-500 transition-all duration-500"
+                style={{ 
+                  width: '100%',
+                  background: `linear-gradient(to right, #22d3ee ${summary.winRateBachi}%, #1e293b ${summary.winRateBachi}%, #1e293b ${100 - summary.winRateCrimebaker}%, #ec4899 ${100 - summary.winRateCrimebaker}%)`
+                }}
+              />
+            </div>
+            <span className="text-xs text-white/30 font-mono">{summary.winRateCrimebaker.toFixed(0)}%</span>
+          </div>
+        </BentoCard>
+        
+        {/* Leader Badge */}
+        {leader && (
+          <BentoCard className="relative overflow-hidden" delay={0.08}>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                  themeColor === 'pink' ? 'bg-pink-500/20' : 'bg-cyan-500/20'
+                }`}>
+                  <Trophy className={themeColor === 'pink' ? 'text-pink-400' : 'text-cyan-400'} size={20} />
+                </div>
+                <div>
+                  <p className="text-xs text-white/40 font-mono uppercase tracking-wider">Current King</p>
+                  <p className={`text-xl font-display uppercase ${
+                    themeColor === 'pink' ? 'text-pink-400' : 'text-cyan-400'
+                  }`}>
+                    {getPlayerDisplayName(leader)}
+                  </p>
+                </div>
+              </div>
               <div className={`px-4 py-2 rounded-xl ${
                 themeColor === 'pink' ? 'bg-pink-500/20' : 'bg-cyan-500/20'
               }`}>
@@ -116,9 +199,9 @@ export function DashboardPage() {
                   +{summary.leadMargin}
                 </p>
               </div>
-            )}
-          </div>
-        </BentoCard>
+            </div>
+          </BentoCard>
+        )}
 
         {/* Stats Row */}
         <div className="grid grid-cols-2 gap-3">
