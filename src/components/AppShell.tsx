@@ -6,35 +6,33 @@ import { useRivalryData, DEFAULT_TABLE_SLUG } from '../hooks/useRivalryData';
 interface AppShellProps {
   children: ReactNode;
   hideNav?: boolean;
-  useNewNav?: boolean;
 }
 
-export function AppShell({ children, hideNav = false, useNewNav = true }: AppShellProps) {
+export function AppShell({ children, hideNav = false }: AppShellProps) {
   const location = useLocation();
   const { matches } = useRivalryData(DEFAULT_TABLE_SLUG);
   const lastMatchTime = matches[0]?.played_at;
 
-  // Hide nav on certain pages
-  const hideOnPaths = ['/match/new', '/arcade'];
-  const shouldHideNav = hideNav || hideOnPaths.includes(location.pathname);
+  // Pages that need full screen (no nav, no default padding)
+  const isFullScreenPage = ['/', '/match/new', '/arcade'].includes(location.pathname);
 
-  // Use Face-Off screen as root - it has its own full-screen layout
-  const isFullScreenPage = location.pathname === '/' || location.pathname === '/arcade';
+  // Navigation visibility
+  const shouldShowNav = !hideNav && !isFullScreenPage;
 
   return (
-    <div className="flex flex-col min-h-full bg-bg-primary">
+    <div className="flex flex-col min-h-full bg-bg-primary text-text-primary transition-colors duration-500">
       {/* Main content area */}
       <main
         className={`
-          flex-1 overflow-y-auto
-          ${!isFullScreenPage && !shouldHideNav ? 'pb-20' : ''}
+          flex-1 w-full max-w-md mx-auto
+          ${!isFullScreenPage ? 'pb-24' : ''}
         `}
       >
         {children}
       </main>
 
-      {/* Dynamic Island Navigation (Phase 2) */}
-      {useNewNav && !shouldHideNav && (
+      {/* Dynamic Island Navigation */}
+      {shouldShowNav && (
         <DynamicIsland lastMatchTime={lastMatchTime} />
       )}
     </div>

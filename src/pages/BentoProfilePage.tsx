@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { User, MapPin, LogOut, Loader2, Trophy, TrendingUp } from 'lucide-react';
+import { User, MapPin, LogOut, Loader2, Trophy, TrendingUp, Volume2, VolumeX } from 'lucide-react';
 import { LineChart, Line, ResponsiveContainer } from 'recharts';
 import { motion } from 'framer-motion';
 import { DynamicIsland, calculateBadges, BadgeCard } from '../components';
@@ -8,6 +8,7 @@ import { getMyProfile, type Profile } from '../lib/profile';
 import { signOut } from '../lib/auth';
 import { supabase } from '../lib/supabaseClient';
 import { useRivalryData, DEFAULT_TABLE_SLUG } from '../hooks/useRivalryData';
+import { useTrashTalk } from '../contexts/TrashTalkContext';
 
 interface BentoCardProps {
   children: React.ReactNode;
@@ -25,6 +26,34 @@ function BentoCard({ children, className = '', delay = 0 }: BentoCardProps) {
     >
       {children}
     </motion.div>
+  );
+}
+
+function SoundToggle() {
+  const { isEnabled, setEnabled } = useTrashTalk();
+
+  return (
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-2">
+        {isEnabled ? (
+          <Volume2 className="text-green-400" size={16} />
+        ) : (
+          <VolumeX className="text-white/40" size={16} />
+        )}
+        <span className="text-xs text-white/40 font-mono uppercase tracking-wider">Trash Talk Sounds</span>
+      </div>
+      <button
+        onClick={() => setEnabled(!isEnabled)}
+        className={`w-12 h-6 rounded-full transition-colors relative ${isEnabled ? 'bg-green-500/30 border border-green-500/50' : 'bg-white/10 border border-white/20'
+          }`}
+      >
+        <motion.div
+          className={`absolute top-1 w-4 h-4 rounded-full ${isEnabled ? 'bg-green-400' : 'bg-white/50'}`}
+          animate={{ left: isEnabled ? 26 : 4 }}
+          transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+        />
+      </button>
+    </div>
   );
 }
 
@@ -75,7 +104,7 @@ export function BentoProfilePage() {
 
   const playerStats = useMemo(() => {
     if (!summary) return null;
-    
+
     const wins = isPlayerBachi ? summary.bachiWins : summary.crimebakerWins;
     const losses = isPlayerBachi ? summary.crimebakerWins : summary.bachiWins;
     const winRate = isPlayerBachi ? summary.winRateBachi : summary.winRateCrimebaker;
@@ -136,24 +165,23 @@ export function BentoProfilePage() {
       {/* Epic Header */}
       <div className="relative overflow-hidden">
         {/* Background image */}
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center opacity-15"
           style={{ backgroundImage: 'url(/tabla-bg.png)' }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black" />
-        
+
         {/* Player color glow */}
         <motion.div
-          className={`absolute top-0 ${isPlayerBachi ? 'left-0' : 'right-0'} w-64 h-64 rounded-full blur-3xl ${
-            themeColor === 'pink' ? 'bg-pink-500/30' : 'bg-cyan-500/30'
-          }`}
-          animate={{ 
+          className={`absolute top-0 ${isPlayerBachi ? 'left-0' : 'right-0'} w-64 h-64 rounded-full blur-3xl ${themeColor === 'pink' ? 'bg-pink-500/30' : 'bg-cyan-500/30'
+            }`}
+          animate={{
             scale: [1, 1.3, 1],
             opacity: [0.2, 0.4, 0.2],
           }}
           transition={{ duration: 3, repeat: Infinity }}
         />
-        
+
         <motion.header
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -161,29 +189,27 @@ export function BentoProfilePage() {
         >
           {/* Large player avatar */}
           <div className="flex items-center gap-4">
-            <motion.div 
-              className={`w-20 h-20 rounded-2xl flex items-center justify-center text-4xl font-display border-2 ${
-                themeColor === 'pink' 
-                  ? 'bg-pink-500/20 border-pink-500/50 text-pink-400' 
-                  : 'bg-cyan-500/20 border-cyan-500/50 text-cyan-400'
-              }`}
+            <motion.div
+              className={`w-20 h-20 rounded-2xl flex items-center justify-center text-4xl font-display border-2 ${themeColor === 'pink'
+                ? 'bg-pink-500/20 border-pink-500/50 text-pink-400'
+                : 'bg-cyan-500/20 border-cyan-500/50 text-cyan-400'
+                }`}
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.1 }}
-              style={{ 
-                boxShadow: themeColor === 'pink' 
-                  ? '0 0 30px rgba(236, 72, 153, 0.3)' 
+              style={{
+                boxShadow: themeColor === 'pink'
+                  ? '0 0 30px rgba(236, 72, 153, 0.3)'
                   : '0 0 30px rgba(34, 211, 238, 0.3)'
               }}
             >
               {playerName[0]}
             </motion.div>
-            
+
             <div className="flex-1">
-              <motion.h1 
-                className={`text-3xl font-display uppercase tracking-tight ${
-                  themeColor === 'pink' ? 'text-pink-400' : 'text-cyan-400'
-                }`}
+              <motion.h1
+                className={`text-3xl font-display uppercase tracking-tight ${themeColor === 'pink' ? 'text-pink-400' : 'text-cyan-400'
+                  }`}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.15 }}
@@ -191,19 +217,18 @@ export function BentoProfilePage() {
               >
                 {playerName}
               </motion.h1>
-              
-              <motion.div 
+
+              <motion.div
                 className="flex items-center gap-2 mt-2"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.25 }}
               >
                 {playerStats?.isLeader && (
-                  <span className={`px-2 py-0.5 text-xs font-mono uppercase rounded-full ${
-                    themeColor === 'pink' 
-                      ? 'bg-pink-500/20 text-pink-400 border border-pink-500/30' 
-                      : 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30'
-                  }`}>
+                  <span className={`px-2 py-0.5 text-xs font-mono uppercase rounded-full ${themeColor === 'pink'
+                    ? 'bg-pink-500/20 text-pink-400 border border-pink-500/30'
+                    : 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30'
+                    }`}>
                     👑 Champion
                   </span>
                 )}
@@ -213,9 +238,9 @@ export function BentoProfilePage() {
               </motion.div>
             </div>
           </div>
-          
+
           {/* Quick stats bar */}
-          <motion.div 
+          <motion.div
             className="flex gap-4 mt-6"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -251,9 +276,9 @@ export function BentoProfilePage() {
             <div className="h-24">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={playerEloData}>
-                  <Line 
-                    type="monotone" 
-                    dataKey="elo" 
+                  <Line
+                    type="monotone"
+                    dataKey="elo"
                     stroke={themeColor === 'pink' ? '#f472b6' : '#22d3ee'}
                     strokeWidth={2}
                     dot={false}
@@ -291,6 +316,11 @@ export function BentoProfilePage() {
           <p className="text-white/40 text-sm">Innsbruck</p>
         </BentoCard>
 
+        {/* Sound Settings */}
+        <BentoCard delay={0.42}>
+          <SoundToggle />
+        </BentoCard>
+
         {/* Session Info */}
         <BentoCard delay={0.45} className="mt-6">
           <div className="flex items-center justify-between mb-3">
@@ -300,7 +330,7 @@ export function BentoProfilePage() {
             </div>
           </div>
           <p className="text-xs text-white/30 font-mono break-all mb-4">{userId ?? 'Unknown'}</p>
-          
+
           <button
             onClick={handleSignOut}
             disabled={isSigningOut}

@@ -54,7 +54,7 @@ export function FaceOffScreen() {
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center opacity-10"
           style={{ backgroundImage: 'url(/tabla-bg.png)' }}
         />
@@ -85,26 +85,29 @@ export function FaceOffScreen() {
 
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-cover bg-center opacity-15" style={{ backgroundImage: 'url(/tabla-bg.png)' }} />
-      <div className={`absolute inset-0 bg-gradient-to-b ${
-        themeColor === 'pink' ? 'from-pink-950/50' : 'from-cyan-950/50'
-      } via-black/80 to-black`} />
-      
+      {/* Background with parallax effect */}
+      <motion.div
+        className="absolute inset-0 bg-cover bg-center opacity-15"
+        style={{ backgroundImage: 'url(/tabla-bg.png)' }}
+        animate={{ scale: [1, 1.05, 1], y: [0, -10, 0] }}
+        transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <div className={`absolute inset-0 bg-gradient-to-b ${themeColor === 'pink' ? 'from-pink-950/50' : 'from-cyan-950/50'
+        } via-black/80 to-black`} />
+
       {/* Animated glow */}
       <motion.div
-        className={`absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl ${
-          themeColor === 'pink' ? 'bg-pink-500/20' : 'bg-cyan-500/20'
-        }`}
+        className={`absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl ${themeColor === 'pink' ? 'bg-pink-500/20' : 'bg-cyan-500/20'
+          }`}
         animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.4, 0.2] }}
         transition={{ duration: 4, repeat: Infinity }}
       />
 
       {/* Main Content */}
       <div className="relative z-10 min-h-screen flex flex-col px-6 pt-10 pb-24">
-        
+
         {/* Header */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="flex items-center justify-between mb-8"
@@ -119,7 +122,7 @@ export function FaceOffScreen() {
         </motion.div>
 
         {/* VS Scoreboard - Hero Section */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1 }}
@@ -131,24 +134,24 @@ export function FaceOffScreen() {
               {/* Bachi */}
               <div className="text-center">
                 <p className="text-white/40 font-mono text-xs uppercase tracking-widest mb-2">Bachi</p>
-                <p className="text-7xl font-display text-cyan-400 tabular-nums" 
-                   style={{ textShadow: '0 0 40px rgba(34, 211, 238, 0.5)' }}>
+                <p className="text-7xl font-display text-cyan-400 tabular-nums"
+                  style={{ textShadow: '0 0 40px rgba(34, 211, 238, 0.5)' }}>
                   {summary.bachiWins}
                 </p>
               </div>
-              
+
               {/* VS Divider */}
               <div className="flex flex-col items-center">
                 <div className="w-px h-8 bg-gradient-to-b from-transparent via-white/20 to-transparent" />
                 <span className="text-white/20 font-display text-2xl my-2">VS</span>
                 <div className="w-px h-8 bg-gradient-to-b from-transparent via-white/20 to-transparent" />
               </div>
-              
+
               {/* Crimebaker */}
               <div className="text-center">
                 <p className="text-white/40 font-mono text-xs uppercase tracking-widest mb-2">Crimebaker</p>
                 <p className="text-7xl font-display text-pink-400 tabular-nums"
-                   style={{ textShadow: '0 0 40px rgba(236, 72, 153, 0.5)' }}>
+                  style={{ textShadow: '0 0 40px rgba(236, 72, 153, 0.5)' }}>
                   {summary.crimebakerWins}
                 </p>
               </div>
@@ -159,13 +162,13 @@ export function FaceOffScreen() {
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-xs text-cyan-400/60 font-mono">{summary.winRateBachi.toFixed(0)}%</span>
                 <div className="flex-1 h-1 bg-white/10 rounded-full overflow-hidden">
-                  <div 
+                  <div
                     className="h-full bg-gradient-to-r from-cyan-500 to-cyan-400"
                     style={{ width: `${summary.winRateBachi}%` }}
                   />
                 </div>
                 <div className="flex-1 h-1 bg-white/10 rounded-full overflow-hidden">
-                  <div 
+                  <div
                     className="h-full bg-gradient-to-l from-pink-500 to-pink-400 ml-auto"
                     style={{ width: `${summary.winRateCrimebaker}%` }}
                   />
@@ -177,34 +180,29 @@ export function FaceOffScreen() {
 
           {/* Leader Card */}
           {!isTied && leader && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className={`glass-panel p-5 mx-auto max-w-sm border ${
-                themeColor === 'pink' ? 'border-pink-500/30' : 'border-cyan-500/30'
-              }`}
+              className={`glass-panel p-5 mx-auto max-w-sm border ${themeColor === 'pink' ? 'border-pink-500/30' : 'border-cyan-500/30'
+                }`}
             >
               <div className="flex items-center gap-4">
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${
-                  themeColor === 'pink' ? 'bg-pink-500/20' : 'bg-cyan-500/20'
-                }`}>
+                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${themeColor === 'pink' ? 'bg-pink-500/20' : 'bg-cyan-500/20'
+                  }`}>
                   <Trophy className={themeColor === 'pink' ? 'text-pink-400' : 'text-cyan-400'} size={28} />
                 </div>
                 <div className="flex-1">
                   <p className="text-white/40 font-mono text-xs uppercase tracking-widest">Current King</p>
-                  <p className={`text-2xl font-display uppercase ${
-                    themeColor === 'pink' ? 'text-pink-400' : 'text-cyan-400'
-                  }`}>
+                  <p className={`text-2xl font-display uppercase ${themeColor === 'pink' ? 'text-pink-400' : 'text-cyan-400'
+                    }`}>
                     {getPlayerDisplayName(leader)}
                   </p>
                 </div>
-                <div className={`px-4 py-2 rounded-xl ${
-                  themeColor === 'pink' ? 'bg-pink-500/20' : 'bg-cyan-500/20'
-                }`}>
-                  <p className={`text-xl font-mono font-bold ${
-                    themeColor === 'pink' ? 'text-pink-400' : 'text-cyan-400'
+                <div className={`px-4 py-2 rounded-xl ${themeColor === 'pink' ? 'bg-pink-500/20' : 'bg-cyan-500/20'
                   }`}>
+                  <p className={`text-xl font-mono font-bold ${themeColor === 'pink' ? 'text-pink-400' : 'text-cyan-400'
+                    }`}>
                     +{summary.leadMargin}
                   </p>
                 </div>
@@ -214,7 +212,7 @@ export function FaceOffScreen() {
 
           {/* Tied State */}
           {isTied && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
@@ -227,23 +225,21 @@ export function FaceOffScreen() {
 
           {/* Streak Info */}
           {summary.currentStreak.count > 1 && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
               className="flex justify-center mt-6"
             >
-              <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${
-                summary.currentStreak.player === 'bachi' 
-                  ? 'bg-cyan-500/10 border border-cyan-500/30' 
+              <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${summary.currentStreak.player === 'bachi'
+                  ? 'bg-cyan-500/10 border border-cyan-500/30'
                   : 'bg-pink-500/10 border border-pink-500/30'
-              }`}>
+                }`}>
                 <TrendingUp size={16} className={
                   summary.currentStreak.player === 'bachi' ? 'text-cyan-400' : 'text-pink-400'
                 } />
-                <span className={`font-mono text-sm ${
-                  summary.currentStreak.player === 'bachi' ? 'text-cyan-400' : 'text-pink-400'
-                }`}>
+                <span className={`font-mono text-sm ${summary.currentStreak.player === 'bachi' ? 'text-cyan-400' : 'text-pink-400'
+                  }`}>
                   {getPlayerDisplayName(summary.currentStreak.player)} on {summary.currentStreak.count} streak
                 </span>
               </div>
@@ -252,7 +248,7 @@ export function FaceOffScreen() {
         </motion.div>
 
         {/* Fight Button */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
@@ -269,13 +265,12 @@ export function FaceOffScreen() {
             whileTap={{ scale: 0.95 }}
           >
             {/* Button */}
-            <div 
-              className={`relative w-20 h-20 rounded-full flex items-center justify-center transition-all ${
-                isHolding ? 'bg-white scale-110' : 'bg-white/90'
-              }`}
+            <div
+              className={`relative w-20 h-20 rounded-full flex items-center justify-center transition-all ${isHolding ? 'bg-white scale-110' : 'bg-white/90'
+                }`}
               style={{
-                boxShadow: isHolding 
-                  ? '0 0 60px rgba(255, 255, 255, 0.8)' 
+                boxShadow: isHolding
+                  ? '0 0 60px rgba(255, 255, 255, 0.8)'
                   : '0 0 30px rgba(255, 255, 255, 0.3)',
               }}
             >
@@ -293,10 +288,9 @@ export function FaceOffScreen() {
               <Swords size={28} className="text-black relative z-10" />
             </div>
           </motion.button>
-          
-          <p className={`text-white/40 font-mono text-xs uppercase tracking-widest transition-opacity ${
-            isHolding ? 'opacity-0' : 'opacity-100'
-          }`}>
+
+          <p className={`text-white/40 font-mono text-xs uppercase tracking-widest transition-opacity ${isHolding ? 'opacity-0' : 'opacity-100'
+            }`}>
             Hold to Enter Arena
           </p>
         </motion.div>

@@ -6,6 +6,7 @@ import './index.css'
 import App from './App.tsx'
 import { AuthGate } from './components'
 import { BootTrace } from './components/BootTrace'
+import { TrashTalkProvider } from './contexts/TrashTalkContext'
 import { trace } from './lib/bootTrace'
 
 // Register PWA service worker with auto-update
@@ -37,7 +38,9 @@ createRoot(document.getElementById('root')!).render(
         {/* All routes go through AuthGate (anonymous session + access code) */}
         <Route path="/*" element={
           <AuthGate>
-            <App />
+            <TrashTalkProvider>
+              <App />
+            </TrashTalkProvider>
           </AuthGate>
         } />
       </Routes>

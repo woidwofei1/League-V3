@@ -36,7 +36,7 @@ export function DynamicIsland({ }: DynamicIslandProps) {
     >
       {/* Gradient fade above nav */}
       <div className="absolute -top-8 left-0 right-0 h-8 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
-      
+
       {/* Nav container */}
       <div className="bg-black/95 backdrop-blur-xl border-t border-white/10">
         <div className="flex items-stretch justify-around max-w-md mx-auto">
@@ -46,12 +46,44 @@ export function DynamicIsland({ }: DynamicIslandProps) {
             onClick={() => handleNavigate('/home')}
             active={currentPath === '/home' || currentPath === '/stats' || currentPath === '/history'}
           />
-          <NavItem
-            icon={<Swords size={22} />}
-            label="Fight"
-            onClick={() => handleNavigate('/match/new')}
-            accent
-          />
+
+          {/* Prominent Fight Button */}
+          <div className="relative -top-5">
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              onClick={() => handleNavigate('/match/new')}
+              className="relative group"
+            >
+              {/* Pulse Effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-pink-500 rounded-full blur opacity-40 group-hover:opacity-100 animate-pulse transition-opacity duration-500" />
+
+              {/* Button Body */}
+              <div className="relative w-14 h-14 bg-gradient-to-tr from-gray-900 to-black rounded-full border border-white/20 flex items-center justify-center shadow-lg shadow-pink-500/20 z-10 overflow-hidden">
+                {/* Inner Gradient */}
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-pink-500/10 opacity-50" />
+
+                {/* Animated Ring */}
+                <motion.div
+                  className="absolute inset-0 rounded-full border border-transparent"
+                  style={{
+                    background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent) border-box',
+                    mask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
+                    maskComposite: 'exclude',
+                  }}
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
+                />
+
+                <Swords size={24} className="text-white relative z-10 drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
+              </div>
+
+              {/* Label */}
+              <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-display uppercase tracking-wider text-white/80 font-bold drop-shadow-md">
+                Arena
+              </span>
+            </motion.button>
+          </div>
+
           <NavItem
             icon={<User size={22} />}
             label="Profile"
@@ -76,33 +108,30 @@ function NavItem({ icon, label, onClick, accent = false, active = false }: NavIt
   return (
     <button
       onClick={onClick}
-      className={`relative flex flex-col items-center justify-center gap-1 py-3 px-6 transition-all active:scale-95 ${
-        accent 
-          ? 'text-white' 
-          : active
-            ? 'text-white'
-            : 'text-white/40 hover:text-white/70'
-      }`}
+      className={`relative flex flex-col items-center justify-center gap-1 py-3 px-6 transition-all active:scale-95 ${accent
+        ? 'text-white'
+        : active
+          ? 'text-white'
+          : 'text-white/40 hover:text-white/70'
+        }`}
     >
       {/* Active/Accent indicator */}
       {(active || accent) && (
         <motion.div
           layoutId="navIndicator"
-          className={`absolute -top-px left-1/2 -translate-x-1/2 h-0.5 w-8 rounded-full ${
-            accent ? 'bg-gradient-to-r from-pink-500 to-cyan-500' : 'bg-white'
-          }`}
+          className={`absolute -top-px left-1/2 -translate-x-1/2 h-0.5 w-8 rounded-full ${accent ? 'bg-gradient-to-r from-pink-500 to-cyan-500' : 'bg-white'
+            }`}
           transition={{ type: 'spring', stiffness: 400, damping: 30 }}
         />
       )}
-      
+
       {/* Icon with glow for accent */}
       <div className={accent ? 'drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]' : ''}>
         {icon}
       </div>
-      
-      <span className={`text-[10px] font-mono uppercase tracking-widest ${
-        accent ? 'font-bold' : 'font-medium'
-      }`}>
+
+      <span className={`text-[10px] font-mono uppercase tracking-widest ${accent ? 'font-bold' : 'font-medium'
+        }`}>
         {label}
       </span>
     </button>

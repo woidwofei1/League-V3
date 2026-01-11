@@ -25,6 +25,7 @@ const CONFETTI_COLORS = [
   '#FF33FF', // light pink
   '#00FF88', // green
   '#FFD93D', // yellow
+  '#FFFFFF', // white sparkle
 ];
 
 function generateConfetti(count: number): ConfettiPiece[] {
@@ -32,18 +33,18 @@ function generateConfetti(count: number): ConfettiPiece[] {
     id: i,
     x: Math.random() * 100,
     color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
-    delay: Math.random() * 0.5,
+    delay: Math.random() * 0.3,
     rotation: Math.random() * 360,
-    size: 6 + Math.random() * 8,
+    size: 4 + Math.random() * 10,
   }));
 }
 
-export function VictoryOverlay({ 
-  winner, 
-  accent, 
-  isVisible, 
+export function VictoryOverlay({
+  winner,
+  accent,
+  isVisible,
   onComplete,
-  duration = 3000 
+  duration = 3000
 }: VictoryOverlayProps) {
   const [confetti, setConfetti] = useState<ConfettiPiece[]>([]);
   const isPink = accent === 'pink';
@@ -51,18 +52,22 @@ export function VictoryOverlay({
   // Generate confetti when visible
   useEffect(() => {
     if (isVisible) {
-      setConfetti(generateConfetti(50));
-      
-      // Haptic feedback
+      setConfetti(generateConfetti(80));
+
+      // Trigger screen shake via CSS class on body
+      document.body.classList.add('animate-shake');
+      setTimeout(() => document.body.classList.remove('animate-shake'), 500);
+
+      // Strong haptic feedback
       if (navigator.vibrate) {
-        navigator.vibrate([50, 50, 100]);
+        navigator.vibrate([100, 50, 100, 50, 200]);
       }
-      
+
       // Auto-dismiss
       const timer = setTimeout(() => {
         onComplete?.();
       }, duration);
-      
+
       return () => clearTimeout(timer);
     }
   }, [isVisible, duration, onComplete]);
@@ -83,18 +88,18 @@ export function VictoryOverlay({
             {confetti.map((piece) => (
               <motion.div
                 key={piece.id}
-                initial={{ 
-                  y: -20, 
+                initial={{
+                  y: -20,
                   x: `${piece.x}vw`,
                   rotate: piece.rotation,
-                  opacity: 1 
+                  opacity: 1
                 }}
-                animate={{ 
+                animate={{
                   y: '110vh',
                   rotate: piece.rotation + 720,
-                  opacity: 0 
+                  opacity: 0
                 }}
-                transition={{ 
+                transition={{
                   duration: 2 + Math.random() * 2,
                   delay: piece.delay,
                   ease: 'linear'
@@ -114,33 +119,33 @@ export function VictoryOverlay({
           <motion.div
             initial={{ scale: 0.5, y: 50 }}
             animate={{ scale: 1, y: 0 }}
-            transition={{ 
-              type: 'spring', 
-              stiffness: 300, 
+            transition={{
+              type: 'spring',
+              stiffness: 300,
               damping: 20,
-              delay: 0.1 
+              delay: 0.1
             }}
             className="text-center relative z-10"
           >
             {/* Trophy */}
             <motion.div
-              animate={{ 
+              animate={{
                 y: [0, -10, 0],
                 scale: [1, 1.1, 1],
               }}
-              transition={{ 
-                duration: 0.6, 
+              transition={{
+                duration: 0.6,
                 repeat: Infinity,
                 repeatType: 'reverse',
               }}
               className="mb-4"
             >
-              <Trophy 
-                size={80} 
+              <Trophy
+                size={80}
                 className={isPink ? 'text-accent-pink mx-auto' : 'text-accent-cyan mx-auto'}
                 style={{
-                  filter: isPink 
-                    ? 'drop-shadow(0 0 30px var(--accent-pink-glow))' 
+                  filter: isPink
+                    ? 'drop-shadow(0 0 30px var(--accent-pink-glow))'
                     : 'drop-shadow(0 0 30px var(--accent-cyan-glow))'
                 }}
               />
@@ -156,8 +161,8 @@ export function VictoryOverlay({
                 ${isPink ? 'text-accent-pink' : 'text-accent-cyan'}
               `}
               style={{
-                textShadow: isPink 
-                  ? '0 0 40px var(--accent-pink-glow)' 
+                textShadow: isPink
+                  ? '0 0 40px var(--accent-pink-glow)'
                   : '0 0 40px var(--accent-cyan-glow)'
               }}
             >
