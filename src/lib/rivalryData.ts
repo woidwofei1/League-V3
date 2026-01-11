@@ -105,7 +105,7 @@ export async function fetchTableBySlug(tableSlug: string): Promise<TableInfo | n
   // Handle venue which may be an array or single object depending on the join
   const venue = Array.isArray(data.venue) ? data.venue[0] : data.venue;
   const venueData = venue as { name: string; city: string } | null;
-  
+
   return {
     id: data.id,
     slug: data.slug,
@@ -185,7 +185,7 @@ export function computeRivalrySummary(matches: Match[]): RivalrySummary {
 
     for (const match of chronological) {
       const winner = match.winner_player_id === bachiId ? 'bachi' : 'crimebaker';
-      
+
       if (winner === tempStreak.player) {
         tempStreak.count++;
       } else {
@@ -196,7 +196,7 @@ export function computeRivalrySummary(matches: Match[]): RivalrySummary {
         tempStreak = { player: winner, count: 1 };
       }
     }
-    
+
     // Check final streak
     if (tempStreak.count > longestStreak.count) {
       longestStreak = { ...tempStreak };
@@ -246,10 +246,10 @@ export function computeEloSeries(matches: Match[]): EloDataPoint[] {
 
   // Process in chronological order
   const chronological = [...matches].reverse();
-  
+
   let bachiElo = 1000;
   let crimebakerElo = 1000;
-  
+
   const series: EloDataPoint[] = [
     {
       date: 'Start',
@@ -298,4 +298,22 @@ export function getPlayerDisplayName(player: 'bachi' | 'crimebaker' | null): str
   if (player === 'bachi') return 'Bachi';
   if (player === 'crimebaker') return 'Crimebaker';
   return '—';
+}
+
+/**
+ * Get player image URL from slug/ID.
+ */
+export function getPlayerImage(playerOrId: string | null): string {
+  if (!playerOrId) return '/avatars/default.png';
+
+  // Normalize input (handle IDs if necessary, though for now we rely on slug-like keys or specific IDs)
+  // In the revamp, we used specific UUIDs or 'bachi'/'crimebaker' slugs.
+
+  const isBachi = playerOrId === 'bachi' || playerOrId.includes('550e8400-e29b-41d4-a716-446655440001'); // Mock ID check
+  const isCrimebaker = playerOrId === 'crimebaker' || playerOrId.includes('550e8400-e29b-41d4-a716-446655440002');
+
+  if (isBachi) return '/avatars/bachi.png'; // Ensure these assets exist or use placeholders
+  if (isCrimebaker) return '/avatars/crimebaker.png';
+
+  return '/avatars/default.png';
 }

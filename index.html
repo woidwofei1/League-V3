@@ -21,6 +21,23 @@
     <title>Pink Room Rivalry</title>
   </head>
   <body>
+    <!-- BOOT ERROR TRAP -->
+    <script>
+      window.onerror = function(msg, url, line, col, error) {
+        var root = document.getElementById('root');
+        if (root) {
+          root.innerHTML = `
+            <div style="background:#0a0a0a; color:#ff3333; padding:24px; font-family:monospace; height:100vh; display:flex; flex-direction:column; justify-content:center;">
+              <h1 style="font-size:24px; margin-bottom:16px;">CRITICAL SYSTEM FAILURE</h1>
+              <h3 style="color:#fff; margin-bottom:8px;">${msg}</h3>
+              <p style="color:#666; font-size:12px; margin-bottom:16px;">Location: ${url}:${line}:${col}</p>
+              <pre style="background:#000; padding:16px; border:1px solid #333; overflow:auto; color:#ccc;">${error && error.stack ? error.stack : 'No stack trace'}</pre>
+              <button onclick="window.location.reload()" style="background:#ff3333; color:white; border:none; padding:12px 24px; margin-top:24px; cursor:pointer; font-weight:bold; width:fit-content;">REBOOT SYSTEM</button>
+            </div>
+          `;
+        }
+      };
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

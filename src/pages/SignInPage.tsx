@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { KeyRound, Loader2, AlertCircle, CheckCircle2, Wifi, Swords } from 'lucide-react';
+import { KeyRound, Loader2, AlertCircle, CheckCircle2, Wifi } from 'lucide-react';
 import { createMyProfile, PLAYER_IDS } from '../lib/profile';
 import { trace } from '../lib/bootTrace';
 
@@ -22,12 +22,12 @@ export function AccessCodePage({ onProfileCreated, isAuthenticated }: AccessCode
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    
+
     if (!isAuthenticated) {
       setError('Still connecting... please wait.');
       return;
     }
-    
+
     setIsLoading(true);
     trace('accessCode: validating', { codeLength: code.length });
 
@@ -70,7 +70,7 @@ export function AccessCodePage({ onProfileCreated, isAuthenticated }: AccessCode
     } catch (err) {
       const errMsg = err instanceof Error ? err.message : 'Failed to select player';
       trace('accessCode: error', { error: errMsg });
-      
+
       if (errMsg.includes('Not authenticated')) {
         setError('Session expired. Please refresh.');
       } else {
@@ -84,49 +84,32 @@ export function AccessCodePage({ onProfileCreated, isAuthenticated }: AccessCode
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-black relative overflow-hidden">
       {/* Table background image */}
-      <div 
+      <div
         className="fixed inset-0 bg-cover bg-center opacity-15"
-        style={{ backgroundImage: 'url(/tabla-bg.png)' }}
+        style={{ backgroundImage: 'url(/home-bg.jpg)' }}
       />
       {/* Gradient overlay */}
       <div className="fixed inset-0 bg-gradient-to-b from-black/70 via-pink-950/20 to-black pointer-events-none" />
-      
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="relative w-full max-w-sm z-10"
       >
         {/* Logo */}
-        <div className="text-center mb-10">
-          <motion.div
+        <div className="text-center mb-12">
+          <motion.img
+            src="/logo.png"
+            alt="TABLA"
+            className="w-96 h-auto mx-auto object-contain drop-shadow-[0_0_30px_rgba(236,72,153,0.5)]"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.1 }}
-            className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-pink-500/20 to-cyan-500/20 border border-white/10 mb-6"
-          >
-            <Swords size={36} className="text-white" />
-          </motion.div>
-          
-          <motion.h1 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-4xl font-display uppercase text-white mb-2"
-          >
-            Pink Room
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="text-lg font-display uppercase bg-gradient-to-r from-pink-400 to-cyan-400 bg-clip-text text-transparent"
-          >
-            Rivalry
-          </motion.p>
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          />
         </div>
 
         {/* Connection status */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
@@ -146,11 +129,11 @@ export function AccessCodePage({ onProfileCreated, isAuthenticated }: AccessCode
         </motion.div>
 
         {/* Form */}
-        <motion.form 
+        <motion.form
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          onSubmit={handleSubmit} 
+          onSubmit={handleSubmit}
           className="space-y-4"
         >
           {/* Code input */}

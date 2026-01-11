@@ -67,3 +67,12 @@ export function useThemeClasses(theme: ThemeColor) {
         }
     }, [theme]);
 }
+
+/**
+ * Non-hook helper to get theme from ID
+ */
+export function getPlayerTheme(playerId: string | null): ThemeColor {
+    if (playerId === PLAYER_IDS.bachi || playerId === 'bachi') return 'cyan';
+    if (playerId === PLAYER_IDS.crimebaker || playerId === 'crimebaker') return 'pink';
+    return 'neutral';
+}

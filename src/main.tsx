@@ -1,11 +1,14 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { registerSW } from 'virtual:pwa-register'
 import './index.css'
 import App from './App.tsx'
 import { AuthGate } from './components'
 import { BootTrace } from './components/BootTrace'
+import { ErrorBoundary } from './components/ErrorBoundary'
 import { TrashTalkProvider } from './contexts/TrashTalkContext'
 import { trace } from './lib/bootTrace'
 
@@ -32,19 +35,21 @@ trace('main: render start');
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
-      <BootTrace />
-      <Routes>
-        {/* All routes go through AuthGate (anonymous session + access code) */}
-        <Route path="/*" element={
-          <AuthGate>
-            <TrashTalkProvider>
-              <App />
-            </TrashTalkProvider>
-          </AuthGate>
-        } />
-      </Routes>
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <BootTrace />
+        <Routes>
+          {/* All routes go through AuthGate (anonymous session + access code) */}
+          <Route path="/*" element={
+            <AuthGate>
+              <TrashTalkProvider>
+                <App />
+              </TrashTalkProvider>
+            </AuthGate>
+          } />
+        </Routes>
+      </BrowserRouter>
+    </ErrorBoundary>
   </StrictMode>,
 )
 

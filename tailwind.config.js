@@ -19,12 +19,16 @@ export default {
           surface: '#0f172a',
           border: '#1e293b',
         },
+        // Voltage Theme
+        midnight: '#020617',
+        'neon-cyan': '#00f0ff',
+        'neon-pink': '#ff00ff',
         // Backgrounds
         'bg-primary': 'var(--bg-primary)',
         'bg-surface': 'var(--bg-surface)',
         'bg-elevated': 'var(--bg-elevated)',
         'bg-glass': 'var(--bg-glass)',
-        
+
         // Accents
         'accent-pink': 'var(--accent-pink)',
         'accent-pink-soft': 'var(--accent-pink-soft)',
@@ -34,12 +38,12 @@ export default {
         'accent-success': 'var(--accent-success)',
         'accent-danger': 'var(--accent-danger)',
         'accent-warning': 'var(--accent-warning)',
-        
+
         // Text
         'text-primary': 'var(--text-primary)',
         'text-secondary': 'var(--text-secondary)',
         'text-muted': 'var(--text-muted)',
-        
+
         // Borders
         'border-subtle': 'var(--border-subtle)',
         'border-active': 'var(--border-active)',

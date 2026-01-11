@@ -7,7 +7,6 @@ import {
   ProfilePage,
   FaceOffPage,
   ArcadeMatchPage,
-  DashboardPage,
   BentoProfilePage,
 } from './pages'
 
@@ -19,16 +18,16 @@ function App() {
           <Routes>
             {/* Main Navigation (3 items: Home, Fight, Profile) */}
             <Route path="/" element={<FaceOffPage />} />
-            <Route path="/home" element={<DashboardPage />} />
+            <Route path="/home" element={<FaceOffPage />} />
             <Route path="/match/new" element={<ArcadeMatchPage />} />
             <Route path="/arcade" element={<ArcadeMatchPage />} />
             <Route path="/profile" element={<BentoProfilePage />} />
-            
+
             {/* Legacy routes - redirect to new pages */}
-            <Route path="/t/:tableSlug" element={<Navigate to="/home" replace />} />
-            <Route path="/stats" element={<DashboardPage />} />
-            <Route path="/history" element={<DashboardPage />} />
-            <Route path="/rivalry" element={<DashboardPage />} />
+            <Route path="/t/:tableSlug" element={<Navigate to="/" replace />} />
+            <Route path="/stats" element={<FaceOffPage />} />
+            <Route path="/history" element={<FaceOffPage />} />
+            <Route path="/rivalry" element={<FaceOffPage />} />
             <Route path="/home-legacy" element={<HomePage />} />
             <Route path="/profile-legacy" element={<ProfilePage />} />
           </Routes>

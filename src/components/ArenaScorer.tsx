@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, RotateCcw, Trophy, Zap, Edit3, Play, Plus, Minus, Check, Trash2 } from 'lucide-react';
 import { getPlayerDisplayName } from '../lib/rivalryData';
-import { useTrashTalk } from '../contexts/TrashTalkContext';
 
 interface SetScore {
   bachi: number;
@@ -31,10 +30,8 @@ export function ArenaScorer({ onMatchComplete }: ArenaScorerProps) {
   const [matchWinner, setMatchWinner] = useState<'bachi' | 'crimebaker' | null>(null);
   const [lastScorer, setLastScorer] = useState<'bachi' | 'crimebaker' | null>(null);
   const [momentum, setMomentum] = useState<{ player: 'bachi' | 'crimebaker' | null; count: number }>({ player: null, count: 0 });
+  const [showExplosion, setShowExplosion] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-
-  // Trash Talk audio
-  const { playSound } = useTrashTalk();
 
   // Quick score mode state
   const [quickSets, setQuickSets] = useState<SetScore[]>([{ bachi: 0, crimebaker: 0 }]);
@@ -72,7 +69,6 @@ export function ArenaScorer({ onMatchComplete }: ArenaScorerProps) {
     triggerHaptic('tap');
     triggerShake();
     setLastScorer(player);
-    playSound('point');
 
     const newScore = {
       ...currentSet,
@@ -85,9 +81,7 @@ export function ArenaScorer({ onMatchComplete }: ArenaScorerProps) {
     // Track momentum (consecutive scores by same player)
     setMomentum(prev => {
       if (prev.player === player) {
-        const newCount = prev.count + 1;
-        if (newCount === 3) playSound('streak');
-        return { player, count: newCount };
+        return { player, count: prev.count + 1 };
       }
       return { player, count: 1 };
     });
@@ -96,7 +90,6 @@ export function ArenaScorer({ onMatchComplete }: ArenaScorerProps) {
     if (setWinner) {
       triggerHaptic('setWin');
       setShowSetWin(setWinner);
-      playSound('setWin');
 
       const newSetsWon = {
         ...setsWon,
@@ -108,8 +101,12 @@ export function ArenaScorer({ onMatchComplete }: ArenaScorerProps) {
       if (newSetsWon[setWinner] >= SETS_TO_WIN) {
         triggerHaptic('matchWin');
         setMatchWinner(setWinner);
-        playSound('matchWin');
         onMatchComplete?.(sets.concat(newScore), setWinner);
+        // Show explosion then redirect home
+        setTimeout(() => {
+          setShowExplosion(true);
+          setTimeout(() => navigate('/'), 1500);
+        }, 2000);
       } else {
         setTimeout(() => {
           setShowSetWin(null);
@@ -117,7 +114,7 @@ export function ArenaScorer({ onMatchComplete }: ArenaScorerProps) {
         }, 1500);
       }
     }
-  }, [currentSet, sets, setsWon, matchWinner, triggerHaptic, triggerShake, checkSetWin, onMatchComplete]);
+  }, [currentSet, sets, setsWon, matchWinner, triggerHaptic, triggerShake, checkSetWin, onMatchComplete, navigate]);
 
   const undoLastPoint = useCallback(() => {
     if (history.length === 0 || matchWinner) return;
@@ -219,8 +216,8 @@ export function ArenaScorer({ onMatchComplete }: ArenaScorerProps) {
     >
       {/* Table background image */}
       <div
-        className="absolute inset-0 bg-cover bg-center opacity-20"
-        style={{ backgroundImage: 'url(/tabla-bg.png)' }}
+        className="absolute inset-0 bg-cover bg-center opacity-30"
+        style={{ backgroundImage: 'url(/unnamed.jpg)' }}
       />
       <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/60" />
 
@@ -652,12 +649,17 @@ export function ArenaScorer({ onMatchComplete }: ArenaScorerProps) {
                   {setsWon.bachi} - {setsWon.crimebaker}
                 </p>
 
-                <button
-                  onClick={handleClose}
-                  className="px-10 py-4 bg-white/10 hover:bg-white/20 text-white font-display uppercase tracking-wider text-lg rounded-2xl transition-all active:scale-95"
-                >
-                  Exit Arena
-                </button>
+                {showExplosion ? (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-white/50 font-mono text-sm uppercase tracking-widest"
+                  >
+                    Returning home...
+                  </motion.div>
+                ) : (
+                  <div className="w-8 h-8 border-2 border-white/30 border-t-transparent rounded-full animate-spin mx-auto" />
+                )}
               </motion.div>
             </div>
           </motion.div>

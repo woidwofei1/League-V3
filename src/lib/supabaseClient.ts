@@ -6,10 +6,10 @@ console.log('[BOOT] supabaseClient: module loading');
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
 
-console.log('[BOOT] supabaseClient: env check', { 
-  hasUrl: !!supabaseUrl, 
+console.log('[BOOT] supabaseClient: env check', {
+  hasUrl: !!supabaseUrl,
   hasKey: !!supabaseAnonKey,
-  url: supabaseUrl?.substring(0, 30) + '...' 
+  url: supabaseUrl?.substring(0, 30) + '...'
 });
 
 if (!supabaseUrl || !supabaseAnonKey) {
